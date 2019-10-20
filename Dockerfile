@@ -1,17 +1,18 @@
 # base image
-FROM node:12.2.0-alpine
+FROM node
 
-# set working directory
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get clean
+
+RUN mkdir /app
 WORKDIR /app
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json /app/
+RUN npm install --only=production
 
-# install and cache app dependencies
-COPY package.json /app/package.json
-RUN npm install --silent
+COPY /public /app/public
+COPY /src /app/src
 
 EXPOSE 3000
 
-# start app
-CMD ["npm", "start"]
+CMD [ "npm", "start" ]
