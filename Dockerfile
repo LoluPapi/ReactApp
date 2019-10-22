@@ -4,13 +4,10 @@ RUN mkdir /app
 WORKDIR /app
 COPY /src /app/src
 COPY /public /app/public
-COPY ["package.json", "package-lock.json*", "./"]
+COPY package.json .
 
-# If you're using yarn:
-#  yarn build
-RUN npm install --silent && mv node_modules ../
+RUN npm install
 
-# Expose PORT 3000 on our virtual machine so we can run our server
-EXPOSE 3000
+COPY . .
 
-CMD [ "npm", "start" ]
+CMD ["npm", "start"]
